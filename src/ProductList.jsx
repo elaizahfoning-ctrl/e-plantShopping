@@ -2,6 +2,49 @@ import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
 function ProductList({ onHomeClick }) {
+    const dispatch = useDispatch();
+    const cartItems = useSelector(state => state.cart.items);
+    const [addedToCart, setAddedToCart] = useState({});
+const cartItems = useSelector(state => state.cart.items);
+
+// Calculate the total number of all items combined
+const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+// Display this inside your cart icon HTML
+<div className="cart-icon">
+  <span className="cart-quantity-count">{totalQuantity}</span>
+</div>
+    // Calculate total quantity for the navigation/header
+    const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant));
+        setAddedToCart((prev) => ({
+            ...prev,
+            [plant.name]: true,
+        }));
+    };
+
+    return (
+        <div>
+            {/* Header showing total items */}
+            <div className="navbar">
+               <div className="cart-total">Items in Cart: {totalQuantity}</div>
+            </div>
+
+            <div className="product-grid">
+                {/* ... (Your existing mapping logic for plantsArray) ... */}
+                <button 
+                    className="product-button" 
+                    disabled={addedToCart[plant.name]}
+                    onClick={() => handleAddToCart(plant)}
+                >
+                    {addedToCart[plant.name] ? "Added to Cart" : "Add to Cart"}
+                </button>
+            </div>
+        </div>
+    );
+}
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
 
